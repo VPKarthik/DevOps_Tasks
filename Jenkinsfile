@@ -4,7 +4,7 @@ pipeline{
         VERSION = "${env.BUILD_ID}"
     }
     stages{
-        stage('SONAR: Quality Check'){
+        stage('Build Image'){
             agent{
                 docker{
                     image 'maven'
@@ -12,9 +12,7 @@ pipeline{
             }
             steps{
                 script{
-                    withSonarQubeEnv(credentialsId: 'sonar-token') {
                         sh 'mvn clean package sonar:sonar'
-                    }
                 }
             }
         }
