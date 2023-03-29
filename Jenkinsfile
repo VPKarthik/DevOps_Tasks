@@ -25,7 +25,7 @@ pipeline{
                       hostPath:
                         path: /var/run/docker.sock
             '''
-            cleanup: never
+            idleMinutes 30
         }
     }
     environment{
