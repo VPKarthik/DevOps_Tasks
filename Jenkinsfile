@@ -17,6 +17,9 @@ pipeline{
                       image: docker:latest
                       command: ["sleep", "infinity"]
                       tty: true
+                      volumeMounts:
+                        - name: docker-socket
+                          mountPath: /var/run/docker.sock
                   volumes:
                     - name: docker-socket
                       hostPath:
