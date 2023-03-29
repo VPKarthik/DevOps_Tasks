@@ -10,8 +10,15 @@ pipeline{
                       image: maven:latest
                       tty: true
                       command: ["sleep", "infinity"]
+                    - name: docker
+                      image: docker:latest
+                      tty: true
+                      command: ["sleep", "infinity"]
             '''
         }
+    }
+    environment{
+        VERSION = "${env.BUILD_ID}"
     }
     stages{
         stage('Maven Build'){
@@ -19,6 +26,15 @@ pipeline{
                 script{
                     container('maven'){
                         sh 'mvn clean package'
+                    }
+                }
+            }
+        }
+        stage('Docker image build'){
+            steps{
+                script{
+                    container('docker'){
+                        sh 'docker build -t 192.168.56.115:8083/test:${VERSION} .'
                     }
                 }
             }
