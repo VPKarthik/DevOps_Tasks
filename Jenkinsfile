@@ -25,8 +25,8 @@ pipeline{
                       hostPath:
                         path: /var/run/docker.sock
             '''
-            /* cleanup: never */
-        }
+            cleanup: false
+       }
     }
     environment{
         VERSION = "${env.BUILD_ID}"
