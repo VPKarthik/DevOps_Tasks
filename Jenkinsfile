@@ -8,8 +8,10 @@ pipeline{
                   containers:
                     - name: docker
                       image: docker:latest
+                      tty: true
                     - name: maven
                       image: maven:latest
+                      tty: true
             '''
         }
     }
