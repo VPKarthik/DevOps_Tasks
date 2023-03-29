@@ -25,7 +25,7 @@ pipeline{
                       hostPath:
                         path: /var/run/docker.sock
             '''
-            /* cleanup: never */
+            cleanup: never
         }
     }
     environment{
