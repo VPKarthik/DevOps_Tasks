@@ -1,41 +1,23 @@
 pipeline{
-    agent any
-    environment{
-        VERSION = "${env.BUILD_ID}"
+    agent{
+        kubernetes{
+            yaml '''
+                apiVersion: v1
+                kind: Pod
+                spec:
+                  containers:
+                    - name: docker
+                      image: docker:latest
+                    - name: maven
+                      image: maven:latest
+            '''
+        }
     }
     stages{
-        stage('SONAR: Quality Check'){
-            agent{
-                docker{
-                    image 'maven'
-                }
-            }
+        stage('Maven Build'){
             steps{
                 script{
-                    withSonarQubeEnv(credentialsId: 'sonar-token') {
-                        sh 'mvn clean package sonar:sonar'
-                    }
-                }
-            }
-        }
-        stage('SONAR: Gate Status'){
-            steps{
-                script{
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
-                }
-            }
-        }
-        stage('Image build & push'){
-            steps{
-                script{
-                    withCredentials([string(credentialsId: 'nexus_pswd', variable: 'nexus_cred')]) {
-                        sh '''
-                            docker build -t 192.168.56.115:8083/javaapp:${VERSION} .
-                            docker login -u admin -p $nexus_cred 192.168.56.115:8083
-                            docker push 192.168.56.115:8083/javaapp:${VERSION}
-                            docker rmi 192.168.56.115:8083/javaapp:${VERSION}
-                        '''
-                    }
+                    sh 'mvn clean package'
                 }
             }
         }
