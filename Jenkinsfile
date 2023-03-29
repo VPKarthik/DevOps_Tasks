@@ -15,6 +15,7 @@ pipeline{
                       tty: true
                       command: ["sleep", "infinity"]
             '''
+            cleanup: never
         }
     }
     environment{
