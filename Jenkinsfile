@@ -8,12 +8,19 @@ pipeline{
                   containers:
                     - name: maven
                       image: maven:latest
-                      tty: true
                       command: ["sleep", "infinity"]
+                      tty: true
+                      volumeMounts:
+                        - name: docker-socket
+                          mountPath: /var/run/docker.sock
                     - name: docker
                       image: docker:latest
-                      tty: true
                       command: ["sleep", "infinity"]
+                      tty: true
+                  volumes:
+                    - name: docker-socket
+                      hostPath:
+                        path: /var/run/docker.sock
             '''
             /* cleanup: never */
         }
