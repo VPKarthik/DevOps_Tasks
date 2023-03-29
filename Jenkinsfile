@@ -9,6 +9,7 @@ pipeline{
                     - name: maven
                       image: maven:latest
                       tty: true
+                      command: ["sleep", "infinity"]
             '''
         }
     }
