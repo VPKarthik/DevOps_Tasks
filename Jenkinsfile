@@ -53,9 +53,9 @@ pipeline{
         stage('Push Docker Image To Nexus Repo'){
             steps{
                 script{
-                    withCredentials([string(credentialsId: 'nexus_pwd', variable: 'nexus-pwd')]) {
+                    withCredentials([string(credentialsId: 'nexus_pwd', variable: 'nexus')]) {
                         sh '''
-                            docker login -u admin -p ${nexus-pwd} 192.168.56.115:8083
+                            docker login -u admin -p $nexus 192.168.56.115:8083
                             docker push 192.168.56.115:8083/test:${VERSION}
                         '''
                     }
