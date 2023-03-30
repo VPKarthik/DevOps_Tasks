@@ -94,9 +94,7 @@ pipeline{
         stage('Deploy to k8s'){
             steps{
                 script{
-                    container('docker'){
-                        kubernetesDeploy (configs: 'https://github.com/VPKarthik/DevOps_Tasks/blob/main/deployment-service.yml', kubeconfigId: 'kube-config-dir')
-                    }
+                        kubernetesDeploy (configs: 'deployment-service.yml', kubeconfigId: 'kube-config-dir')
                 }
             }
         }
