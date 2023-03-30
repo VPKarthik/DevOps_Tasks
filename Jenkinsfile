@@ -64,5 +64,22 @@ pipeline{
                 }
             }
         }
+        stage('Push Image to DockerHub'){
+            steps{
+                script{
+                    container('docker'){
+                        withCredentials([string(credentialsId: 'docker_auth', variable: 'docker_pwd')]) {
+                            sh '''
+                                docker login -u vpkarthikhosamane -p ${docker_pwd}
+                                docker tag 192.168.56.115:8083/test:${VERSION} vpkarthikhosamane/test:${VERSION}
+                                docker push vpkarthikhosamane/test:${VERSION}
+                                docker rmi 192.168.56.115:8083/test:${VERSION}
+                                docker rmi 192.168.56.115:8083/test:${VERSION}
+                            '''
+                        }
+                    }
+                }
+            }
+        }
     }
 }
