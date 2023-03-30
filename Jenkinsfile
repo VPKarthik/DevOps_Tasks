@@ -73,10 +73,29 @@ pipeline{
                                 docker login -u vpkarthikhosamane -p ${docker_pwd}
                                 docker tag 192.168.56.115:8083/test:${VERSION} vpkarthikhosamane/test:${VERSION}
                                 docker push vpkarthikhosamane/test:${VERSION}
-                                docker rmi 192.168.56.115:8083/test:${VERSION}
-                                docker rmi 192.168.56.115:8083/test:${VERSION}
                             '''
                         }
+                    }
+                }
+            }
+        }
+        stage('Remove Local Image'){
+            steps{
+                script{
+                    container('docker'){
+                        sh '''
+                            docker rmi vpkarthikhosamane/test:${VERSION}
+                            docker rmi 192.168.56.115:8083/test:${VERSION}
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Deploy to k8s'){
+            steps{
+                script{
+                    container('docker'){
+                        kubernetesDeploy (configs: 'https://github.com/VPKarthik/DevOps_Tasks/blob/main/deployment-service.yml', kubeconfigId: 'kube-config-dir')
                     }
                 }
             }
